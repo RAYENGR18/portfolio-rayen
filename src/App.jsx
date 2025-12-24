@@ -23,7 +23,7 @@ export default function Portfolio() {
     email: "rayengragba18@gmail.com",
     location: "Ariana, Tunisie",
     github: "https://github.com/RAYENGR18/",
-    linkedin: "https://www.linkedin.com/", // Pensez à mettre votre vrai lien LinkedIn ici
+    linkedin: "https://www.linkedin.com/in/gragba-rayen-3abb28375/", // Pensez à mettre votre vrai lien LinkedIn ici
     // Pour la photo : mettez une image nommée 'profile.jpg' dans le dossier 'public' de votre projet
     photoUrl: "/profile.jpg" 
   };
