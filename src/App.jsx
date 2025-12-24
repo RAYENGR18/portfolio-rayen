@@ -53,7 +53,7 @@ export default function Portfolio() {
   const [profile, setProfile] = useState({
     name: "GRAGBA RAYEN",
     title: "Full Stack Developer, Data & Freelancer",
-    bio: "Developer currently pursuing a Research Master's in Computer Science (Software Engineering), focused on Data, Artificial Intelligence, and digital systems. Passionate about solving complex problems, data analysis, and designing intelligent solutions. Proven experience in Python development, applied AI, and building web platforms.",
+    bio: "Developer, focused on Data Science, Artificial Intelligence, and digital systems. Passionate about solving complex problems, data analysis, and designing intelligent solutions. Proven experience in Python development, applied AI, and building web platforms.",
     email: "rayengragba18@gmail.com",
     phone: "+216 24 466 219",
     location: "Ariana, Tunisia",
