@@ -1,166 +1,249 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Github, 
   Linkedin, 
   Mail, 
+  Phone, 
   MapPin, 
   ExternalLink, 
   Code, 
+  Database, 
   Layout, 
   GraduationCap, 
   Briefcase, 
-  Server,
-  User
+  Edit3, 
+  Save, 
+  Upload,
+  User,
+  Server
 } from 'lucide-react';
 
+// Composant pour le texte éditable
+const EditableField = ({ value, onChange, isEditing, className, type = "text", multiline = false }) => {
+  if (!isEditing) {
+    return <span className={className}>{value}</span>;
+  }
+
+  if (multiline) {
+    return (
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`w-full bg-slate-800 border border-blue-500 rounded p-2 text-white outline-none focus:ring-2 focus:ring-blue-400 ${className}`}
+        rows={4}
+      />
+    );
+  }
+
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={`bg-slate-800 border border-blue-500 rounded px-2 py-1 text-white outline-none focus:ring-2 focus:ring-blue-400 w-full ${className}`}
+    />
+  );
+};
+
 export default function Portfolio() {
-  // --- DONNÉES DU PORTFOLIO (Modifiez ici si besoin) ---
+  const [isEditing, setIsEditing] = useState(false);
   
-  const profile = {
+  // État initial basé sur le CV fourni, traduit en anglais
+  const [profile, setProfile] = useState({
     name: "GRAGBA RAYEN",
-    title: "Développeur Full Stack, Data & Freelancer",
-    bio: "Développeur actuellement en Master 2 de Recherche en Informatique (Génie Logiciel), orienté Data, Intelligence Artificielle et systèmes digitaux. Passionné par la résolution de problèmes complexes, l'analyse de données et la conception de solutions intelligentes. Expérience confirmée dans le développement Python, l'IA appliquée et la création de plateformes web.",
+    title: "Full Stack Developer, Data & Freelancer",
+    bio: "Developer currently pursuing a Research Master's in Computer Science (Software Engineering), focused on Data, Artificial Intelligence, and digital systems. Passionate about solving complex problems, data analysis, and designing intelligent solutions. Proven experience in Python development, applied AI, and building web platforms.",
     email: "rayengragba18@gmail.com",
-    location: "Ariana, Tunisie",
+    phone: "+216 24 466 219",
+    location: "Ariana, Tunisia",
     github: "https://github.com/RAYENGR18/",
-    linkedin: "https://www.linkedin.com/in/gragba-rayen-3abb28375/", // Pensez à mettre votre vrai lien LinkedIn ici
-    // Pour la photo : mettez une image nommée 'profile.jpg' dans le dossier 'public' de votre projet
-    photoUrl: "/profile.jpg" 
-  };
+    linkedin: "https://www.linkedin.com/in/gragba-rayen-3abb28375/",
+    photoUrl: null // L'utilisateur pourra uploader sa photo
+  });
 
-  const skills = [
-    { category: "Langages", items: "Python, PHP, .NET, Java, JavaScript" },
+  const [skills, setSkills] = useState([
+    { category: "Languages", items: "Python, PHP, .NET, Java, JavaScript" },
     { category: "Web", items: "React.js, Angular, Symfony, Django" },
-    { category: "Data & IA", items: "Pandas, Scikit-Learn, TensorFlow, NLP" },
-    { category: "DevOps & BD", items: "Docker, Git, SQL, PostgreSQL, MySQL" }
-  ];
+    { category: "Data & AI", items: "Pandas, Scikit-Learn, TensorFlow, NLP" },
+    { category: "DevOps & DB", items: "Docker, Git, SQL, PostgreSQL, MySQL" }
+  ]);
 
-  const education = [
+  const [education, setEducation] = useState([
     {
-      degree: "Master 2 Recherche Informatique (Génie Logiciel)",
+      degree: "Research Master's in Computer Science (Software Engineering)",
       school: "ISI Ariana",
-      year: "2024 - Présent",
-      desc: "Orienté Data, Intelligence Artificielle et systèmes digitaux."
+      year: "2024 - Present",
+      desc: "Focused on Data, Artificial Intelligence, and digital systems."
     },
     {
-      degree: "Licence en Génie des Systèmes Informatiques",
+      degree: "Bachelor's in Computer Systems Engineering",
       school: "FST Tunis",
-      year: "Juillet 2024",
+      year: "July 2024",
       desc: ""
     },
     {
-      degree: "Baccalauréat Scientifique",
+      degree: "Scientific Baccalaureate",
       school: "Lycée Sokra",
       year: "2021",
       desc: ""
     }
-  ];
+  ]);
 
-  const experience = [
+  const [experience, setExperience] = useState([
     {
-      role: "Développeur Full Stack",
+      role: "Full Stack Developer",
       company: "AppWeb Plus",
       period: "Nov 2024 - Oct 2025",
-      description: "Ingénierie de fonctionnalités web basées sur l'IA (React.js/Symfony). Développement d'interfaces dynamiques et API robustes."
+      description: "Engineering AI-based web features (React.js/Symfony). Developing dynamic interfaces and robust APIs."
     },
     {
-      role: "PFE - Développeur Data & BI",
+      role: "End of Studies Project - Data & BI Developer",
       company: "Team IT Connection",
-      period: "Fév - Juin 2024",
-      description: "Conception d'un module BI dynamique dans Odoo ERP. Automatisation SQL et dashboards avec WebDataRocks & amCharts."
+      period: "Feb - June 2024",
+      description: "Designing a dynamic BI module in Odoo ERP. SQL automation and dashboards with WebDataRocks & amCharts."
     },
     {
-      role: "Développeur Full Stack (Projets Réels)",
-      company: "Freelance / Université",
+      role: "Full Stack Developer (Real Projects)",
+      company: "Freelance / University",
       period: "2023 - 2025",
-      description: "Développement d'une plateforme RH intelligente, système Smart House IoT et solution e-commerce .NET."
+      description: "Developing an intelligent HR platform, Smart House IoT system, and .NET e-commerce solution."
     }
-  ];
+  ]);
 
-  const projects = [
+  const [projects, setProjects] = useState([
     {
       name: "Besimmo Real Estate",
       url: "https://besimmo.be/",
-      desc: "Plateforme immobilière professionnelle. (Site réalisé)",
+      desc: "Professional real estate platform. (Site built)",
       tags: ["Web", "Production"]
     },
     {
       name: "Tileo UAE",
       url: "https://en.tileo.ae/",
-      desc: "Site vitrine pour une entreprise aux Émirats. (Site réalisé)",
+      desc: "Showcase site for a UAE company. (Site built)",
       tags: ["Web", "International"]
     },
     {
       name: "Smart Parking System",
       url: "https://github.com/RAYENGR18/",
-      desc: "Détection en temps réel, réservation et tableau de bord interactif.",
+      desc: "Real-time detection, reservation, and interactive dashboard.",
       tags: ["IoT", "Dashboard"]
     },
     {
       name: "Medical AI Analysis",
       url: "https://github.com/RAYENGR18/",
-      desc: "Classification d'imagerie médicale via Deep Learning.",
+      desc: "Medical imaging classification via Deep Learning.",
       tags: ["AI", "Python"]
     }
-  ];
+  ]);
 
-  // --- RENDU (Ne touchez pas en dessous sauf pour le design) ---
+  const fileInputRef = useRef(null);
+
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfile({ ...profile, photoUrl: imageUrl });
+    }
+  };
+
+  const updateList = (setter, list, index, field, value) => {
+    const newList = [...list];
+    newList[index][field] = value;
+    setter(newList);
+  };
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-blue-500 selection:text-white pb-20">
       
+      {/* Navigation Flottante / Mode Édition */}
+      <div className="fixed top-4 right-4 z-50">
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-lg transition-all ${
+            isEditing 
+              ? "bg-green-600 hover:bg-green-700 text-white" 
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
+        >
+          {isEditing ? <Save size={18} /> : <Edit3 size={18} />}
+          {isEditing ? "Save Changes" : "Edit Mode"}
+        </button>
+      </div>
+
       {/* Header / Hero Section */}
       <header className="relative pt-24 pb-16 px-6 md:px-12 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-10">
           
           {/* Photo de Profil */}
-          <div className="relative group shrink-0">
-            <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-blue-500 shadow-2xl bg-slate-800 flex items-center justify-center">
-              <img 
-                src={profile.photoUrl} 
-                alt={profile.name} 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.onerror = null; 
-                  e.target.style.display = 'none'; // Cache l'image si elle n'existe pas
-                  e.target.nextSibling.style.display = 'flex'; // Affiche l'icône
-                }} 
-              />
-              <div className="hidden w-full h-full flex items-center justify-center text-slate-500 flex-col absolute inset-0 bg-slate-800">
-                 <User size={64} />
-              </div>
+          <div className="relative group">
+            <div className={`w-48 h-48 rounded-full overflow-hidden border-4 border-blue-500 shadow-2xl ${isEditing ? 'cursor-pointer hover:opacity-80' : ''}`}
+                 onClick={() => isEditing && fileInputRef.current.click()}>
+              {profile.photoUrl ? (
+                <img src={profile.photoUrl} alt="Profil" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500 flex-col">
+                  <User size={64} />
+                  {isEditing && <span className="text-xs mt-2">Click to add photo</span>}
+                </div>
+              )}
             </div>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*" 
+              onChange={handlePhotoUpload} 
+            />
+            {isEditing && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 pointer-events-none">
+                <Upload className="text-white" />
+              </div>
+            )}
           </div>
 
           {/* Info Principales */}
           <div className="flex-1 text-center md:text-left space-y-4">
             <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-              {profile.name}
+              <EditableField 
+                value={profile.name} 
+                onChange={(val) => setProfile({...profile, name: val})} 
+                isEditing={isEditing} 
+              />
             </h1>
             <h2 className="text-xl md:text-2xl text-slate-300 font-light">
-              {profile.title}
+              <EditableField 
+                value={profile.title} 
+                onChange={(val) => setProfile({...profile, title: val})} 
+                isEditing={isEditing} 
+              />
             </h2>
-            <p className="text-slate-400 max-w-2xl leading-relaxed mx-auto md:mx-0">
-              {profile.bio}
+            <p className="text-slate-400 max-w-2xl leading-relaxed">
+              <EditableField 
+                value={profile.bio} 
+                onChange={(val) => setProfile({...profile, bio: val})} 
+                isEditing={isEditing} 
+                multiline={true}
+              />
             </p>
 
             {/* Contact Links */}
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-4">
-              <a href={profile.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 text-white">
+              <a href={profile.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700">
                 <Github size={18} className="text-blue-400" />
                 <span>GitHub</span>
               </a>
-              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 text-white">
+              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700">
                 <Linkedin size={18} className="text-blue-400" />
                 <span>LinkedIn</span>
               </a>
-              <a href={`mailto:${profile.email}`} className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 text-white">
+              <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-lg border border-slate-700">
                 <Mail size={18} className="text-blue-400" />
-                <span>{profile.email}</span>
-              </a>
+                <EditableField value={profile.email} onChange={(val) => setProfile({...profile, email: val})} isEditing={isEditing} />
+              </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 rounded-lg border border-slate-700">
                 <MapPin size={18} className="text-blue-400" />
-                <span>{profile.location}</span>
+                <EditableField value={profile.location} onChange={(val) => setProfile({...profile, location: val})} isEditing={isEditing} />
               </div>
             </div>
           </div>
@@ -176,16 +259,25 @@ export default function Portfolio() {
           {/* Compétences */}
           <section>
             <h3 className="flex items-center gap-2 text-xl font-bold text-white mb-6 border-b border-slate-700 pb-2">
-              <Code className="text-blue-500" /> Compétences Techniques
+              <Code className="text-blue-500" /> Technical Skills
             </h3>
             <div className="space-y-4">
               {skills.map((skill, index) => (
                 <div key={index} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 hover:border-blue-500/30 transition-colors">
                   <div className="font-semibold text-blue-300 mb-1">
-                    {skill.category}
+                    <EditableField 
+                      value={skill.category} 
+                      onChange={(val) => updateList(setSkills, skills, index, 'category', val)} 
+                      isEditing={isEditing} 
+                    />
                   </div>
                   <div className="text-sm text-slate-400">
-                    {skill.items}
+                    <EditableField 
+                      value={skill.items} 
+                      onChange={(val) => updateList(setSkills, skills, index, 'items', val)} 
+                      isEditing={isEditing} 
+                      multiline={true}
+                    />
                   </div>
                 </div>
               ))}
@@ -195,23 +287,23 @@ export default function Portfolio() {
           {/* Formation */}
           <section>
             <h3 className="flex items-center gap-2 text-xl font-bold text-white mb-6 border-b border-slate-700 pb-2">
-              <GraduationCap className="text-emerald-500" /> Formation
+              <GraduationCap className="text-emerald-500" /> Education
             </h3>
             <div className="space-y-6">
               {education.map((edu, index) => (
                 <div key={index} className="pl-4 border-l-2 border-slate-700 hover:border-emerald-500 transition-colors">
                   <div className="text-sm text-emerald-400 font-mono mb-1">
-                    {edu.year}
+                    <EditableField value={edu.year} onChange={(val) => updateList(setEducation, education, index, 'year', val)} isEditing={isEditing} />
                   </div>
                   <div className="font-bold text-slate-200">
-                    {edu.degree}
+                    <EditableField value={edu.degree} onChange={(val) => updateList(setEducation, education, index, 'degree', val)} isEditing={isEditing} />
                   </div>
                   <div className="text-slate-400 text-sm">
-                    {edu.school}
+                    <EditableField value={edu.school} onChange={(val) => updateList(setEducation, education, index, 'school', val)} isEditing={isEditing} />
                   </div>
                   {edu.desc && (
                     <div className="text-slate-500 text-xs mt-1 italic">
-                      {edu.desc}
+                       <EditableField value={edu.desc} onChange={(val) => updateList(setEducation, education, index, 'desc', val)} isEditing={isEditing} />
                     </div>
                   )}
                 </div>
@@ -227,7 +319,7 @@ export default function Portfolio() {
           {/* Expériences */}
           <section>
             <h3 className="flex items-center gap-2 text-2xl font-bold text-white mb-8">
-              <Briefcase className="text-blue-500" /> Expériences Professionnelles
+              <Briefcase className="text-blue-500" /> Professional Experience
             </h3>
             <div className="space-y-8">
               {experience.map((exp, index) => (
@@ -235,18 +327,18 @@ export default function Portfolio() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
                     <div>
                       <h4 className="text-xl font-bold text-blue-100">
-                        {exp.role}
+                        <EditableField value={exp.role} onChange={(val) => updateList(setExperience, experience, index, 'role', val)} isEditing={isEditing} />
                       </h4>
                       <div className="text-blue-400 font-medium">
-                        {exp.company}
+                        <EditableField value={exp.company} onChange={(val) => updateList(setExperience, experience, index, 'company', val)} isEditing={isEditing} />
                       </div>
                     </div>
                     <span className="text-sm text-slate-400 bg-slate-900 px-3 py-1 rounded-full mt-2 md:mt-0 w-fit">
-                      {exp.period}
+                      <EditableField value={exp.period} onChange={(val) => updateList(setExperience, experience, index, 'period', val)} isEditing={isEditing} />
                     </span>
                   </div>
                   <p className="text-slate-300 leading-relaxed">
-                    {exp.description}
+                    <EditableField value={exp.description} onChange={(val) => updateList(setExperience, experience, index, 'description', val)} isEditing={isEditing} multiline={true} />
                   </p>
                 </div>
               ))}
@@ -256,7 +348,7 @@ export default function Portfolio() {
           {/* Projets & Réalisations */}
           <section>
             <h3 className="flex items-center gap-2 text-2xl font-bold text-white mb-8">
-              <Layout className="text-emerald-500" /> Portfolio & Projets
+              <Layout className="text-emerald-500" /> Portfolio & Projects
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {projects.map((proj, index) => (
@@ -271,18 +363,18 @@ export default function Portfolio() {
                         target="_blank" 
                         rel="noreferrer"
                         className="text-slate-500 hover:text-white transition-colors"
-                        title="Voir le projet"
+                        title="View Project"
                       >
                         <ExternalLink size={20} />
                       </a>
                     </div>
                     
                     <h4 className="text-lg font-bold text-white mb-2">
-                      {proj.name}
+                      <EditableField value={proj.name} onChange={(val) => updateList(setProjects, projects, index, 'name', val)} isEditing={isEditing} />
                     </h4>
                     
                     <p className="text-slate-400 text-sm mb-6 flex-grow">
-                      {proj.desc}
+                      <EditableField value={proj.desc} onChange={(val) => updateList(setProjects, projects, index, 'desc', val)} isEditing={isEditing} multiline={true} />
                     </p>
 
                     <div className="flex flex-wrap gap-2 mt-auto">
@@ -302,7 +394,7 @@ export default function Portfolio() {
       </main>
       
       <footer className="text-center text-slate-600 mt-20 pt-10 border-t border-slate-800 text-sm">
-        <p>© {new Date().getFullYear()} {profile.name}. Tous droits réservés.</p>
+        <p>© {new Date().getFullYear()} {profile.name}. All rights reserved.</p>
       </footer>
 
     </div>
