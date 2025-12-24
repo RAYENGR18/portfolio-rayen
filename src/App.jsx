@@ -49,6 +49,7 @@ export default function Portfolio() {
   const [isEditing, setIsEditing] = useState(false);
   
   // État initial basé sur le CV fourni, traduit en anglais
+  // État initial basé sur le CV fourni
   const [profile, setProfile] = useState({
     name: "GRAGBA RAYEN",
     title: "Full Stack Developer, Data & Freelancer",
@@ -58,7 +59,7 @@ export default function Portfolio() {
     location: "Ariana, Tunisia",
     github: "https://github.com/RAYENGR18/",
     linkedin: "https://www.linkedin.com/in/gragba-rayen-3abb28375/",
-    photoUrl: null // L'utilisateur pourra uploader sa photo
+    photoUrl: "/profile.jpg" // <--- MODIFICATION ICI (au lieu de null)
   });
 
   const [skills, setSkills] = useState([
